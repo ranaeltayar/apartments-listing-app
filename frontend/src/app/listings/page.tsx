@@ -93,7 +93,7 @@ const ListingsPage = () => {
                                     borderRadius="md"
                                 />
                                 <CardBody>
-                                    <Text fontWeight="bold">{listing.refNumber}</Text>
+                                    <Text fontWeight="bold">{listing.name}</Text>
                                     <Text display="flex" alignItems="center">
                                         <MdLocationOn style={{
                                             marginRight: '5px',

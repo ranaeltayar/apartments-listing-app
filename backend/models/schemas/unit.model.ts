@@ -6,14 +6,14 @@ import {FinishingTypeEnum} from "../../constants/enums/finishing-type.enum";
 import AmenityModel from "./amenity.model";
 import ProjectModel from './project.model';
 
-const apartmentSchema = new mongoose.Schema<IUnit>({
+const unitSchema = new mongoose.Schema<IUnit>({
     refNumber: {type: String, required: true, unique: true},
     name: {type: String, required: true},
-    number: {type: String, required: true},
+    unitNumber: {type: Number, required: true},
     bedrooms: {type: Number, required: true},
     bathrooms: {type: Number, required: true},
     imageUrls: {type: [String], default: []},
-    compound: {type: String, required: true, unique: true},
+    compound: {type: String, required: true},
     propertyType: {
         type: String,
         enum: Object.values(PropertyTypeEnum),
@@ -34,9 +34,21 @@ const apartmentSchema = new mongoose.Schema<IUnit>({
         enum: Object.values(FinishingTypeEnum),
         required: true,
     },
-    amenities: [{type: AmenityModel.schema, require: true}],
+    amenities: [{type: AmenityModel.schema, required: true}],
 });
 
-const unitModel = mongoose.model("unit", apartmentSchema);
+unitSchema.pre('validate', function (next) {
+    const unit = this as IUnit;
+   console.log(unit.refNumber)
+    if (!unit.refNumber) {
+        const timestamp = Date.now().toString();
+        const randomNum = Math.floor(Math.random() * 10000);
+        unit.refNumber = `AP-${timestamp}-${randomNum}`;
+    }
+
+    next();
+});
+
+const unitModel = mongoose.model("unit", unitSchema);
 
 export default unitModel;

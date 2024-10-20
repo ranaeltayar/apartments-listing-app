@@ -1,7 +1,6 @@
 export interface IListItem {
     _id: string;
     name: string;
-    refNumber: string;
     bedrooms: number;
     bathrooms: number;
     area: number;

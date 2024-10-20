@@ -66,7 +66,7 @@ const DetailsPage = ({params}: { params: { id: string } }) => {
     return (
         <Box p={50}  boxShadow={"5px 4px 15px 1px rgba(0,0,0,0.2)"} borderRadius="md" background="#fcfcfc">
             <Heading mb={6} fontSize="2xl"
-                     fontWeight="bold">{listing.refNumber} - {listing.name}</Heading>
+                     fontWeight="bold">{listing.name}</Heading>
 
             <Box maxW={800} mt={10} mx={'auto'}
                  overflow="hidden">

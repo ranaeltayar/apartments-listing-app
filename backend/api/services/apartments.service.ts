@@ -7,7 +7,7 @@ import {IUnit} from '../../models/interfaces/unit.interface';
 class ApartmentService {
     async getAllApartments(limit: number, offset: number): Promise<IListingResponse> {
         try {
-            const units = await ApartmentModel.find({}, 'refNumber bedrooms bathrooms price imageUrls currency size compound')
+            const units = await ApartmentModel.find({}, 'name bedrooms bathrooms price imageUrls currency size compound')
                 .skip(offset)
                 .limit(limit)
                 .exec();
@@ -23,7 +23,7 @@ class ApartmentService {
                 },
             }
         } catch (error) {
-            throw new Error("Error fetching apartments");
+            throw new Error(messages.DATA_FETCHING_ERROR);
         }
     }
 
@@ -31,11 +31,11 @@ class ApartmentService {
         try {
             const apartment = await ApartmentModel.findById(id).exec();
             if (!apartment) {
-                throw new Error("Apartment not found");
+                throw new Error(messages.DATA_NOT_FOUND);
             }
             return apartment;
         } catch (error) {
-            throw new Error("Error fetching apartment details");
+            throw new Error(messages.DATA_FETCHING_ERROR);
         }
     }
 
@@ -45,7 +45,7 @@ class ApartmentService {
             return await newUnit.save();
         } catch (error) {
             console.log(error)
-            throw new Error("Error creating apartment");
+            throw new Error(messages.CREATION_ERROR);
         }
     }
 }
