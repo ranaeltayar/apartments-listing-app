@@ -1,0 +1,146 @@
+"use client";
+
+import {
+    Box,
+    Button,
+    Card,
+    CardBody,
+    Heading,
+    HStack,
+    Image,
+    SimpleGrid,
+    Spinner,
+    Text,
+} from '@chakra-ui/react';
+import {MdBathtub, MdBedroomChild, MdCropSquare, MdLocationOn} from 'react-icons/md';
+import React, {useEffect, useState} from 'react';
+import {IListingResponse} from '@/app/responses/listing-response.interface';
+import {IListItem} from '@/app/responses/list-item.interface';
+import axios from 'axios';
+import {useRouter} from 'next/navigation';
+import {formatPrice} from '@/app/helpers/currency-format';
+
+const ListingsPage = () => {
+    const [listings, setListings] = useState<IListItem[]>([]);
+    const [loading, setLoading] = useState<boolean>(true); // Loading state
+    const [currentPage, setCurrentPage] = useState<number>(1); // Current page
+    const [totalListings, setTotalListings] = useState<number>(0); // Total listings count
+    const listingsPerPage = 10; // Number of listings per page
+    const router = useRouter(); // Initialize the router
+
+    useEffect(() => {
+        const fetchListings = async () => {
+            try {
+                setLoading(true); // Start loading
+                const offset = (currentPage - 1) * listingsPerPage; // Calculate offset
+                const response = await axios.get<IListingResponse>(`http://localhost:5000/api/units`, {
+                    params: {
+                        limit: listingsPerPage,
+                        offset: offset,
+                    },
+                });
+                setListings(response.data.listings);
+                setTotalListings(response.data.pagination.total); // Set total listings count
+            } catch (error) {
+                console.error('Error fetching listings:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchListings();
+    }, [currentPage]); // Dependency array includes currentPage
+
+    const handleCardClick = (id: string) => {
+        router.push(`/listings/${id}`);
+    };
+
+    const totalPages = Math.ceil(totalListings / listingsPerPage); // Calculate total pages
+
+    return (
+        <Box>
+            <Heading mb={6} size='xl'>Available Listings</Heading>
+            <Heading mb={6} size='l'>{totalListings} Results Found</Heading>
+
+
+            {loading ? (
+                <Box
+                    display="flex"
+                    justifyContent="center" // Center horizontally
+                    alignItems="center"      // Center vertically
+                    height="100vh"           // Full viewport height
+                >
+                    <Spinner
+                        thickness='4px'
+                        speed='0.65s'
+                        emptyColor='gray.200'
+                        color='blue.500'
+                        size='xl'
+                    />
+                </Box>
+            ) : (
+                <>
+                    <SimpleGrid columns={[1, 2, 3]} spacing={10}>
+                        {listings.map((listing) => (
+                            <Card key={listing._id} onClick={() => handleCardClick(listing._id)}
+                                  cursor="pointer" boxShadow={"5px 4px 15px 1px rgba(0,0,0,0.2)"}>
+                                <Image
+                                    src={listing.imageUrls[0]}
+                                    alt="Image"
+                                    width="100%"
+                                    height="300px"
+                                    objectFit="cover"
+                                    borderRadius="md"
+                                />
+                                <CardBody>
+                                    <Text fontWeight="bold">{listing.refNumber}</Text>
+                                    <Text display="flex" alignItems="center">
+                                        <MdLocationOn style={{
+                                            marginRight: '5px',
+                                            color: 'rgb(204 57 0)'
+                                        }}/> {/* Location icon */}
+                                        {listing.compound}
+                                    </Text>
+                                    <Box display="flex" alignItems="center">
+                                        <MdBedroomChild style={{marginRight: '5px'}}/>
+                                        {listing.bedrooms} Bed
+                                        \ <MdBathtub style={{marginRight: '5px'}}/>
+                                        {listing.bathrooms} Bath
+                                    </Box>
+                                    <Text fontWeight="bold"
+                                          style={{'color': '#008080'}}>{formatPrice(listing.price, listing.currency)}</Text>
+                                    <Box display="flex" alignItems="center"> {/* Size with icon */}
+                                        <MdCropSquare
+                                            style={{marginRight: '5px'}}/> {/* Size icon */}
+                                        <Text fontWeight="bold">{listing.size} m²</Text>
+                                    </Box>
+                                </CardBody>
+                            </Card>
+                        ))}
+                    </SimpleGrid>
+
+                    {/* Pagination Controls */}
+                    <HStack spacing={4} mt={5} justifyContent="center">
+                        <Button
+                            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                            isDisabled={currentPage === 1}
+                        >
+                            Previous
+                        </Button>
+                        <Text>
+                            Page {currentPage} of {totalPages}
+                        </Text>
+                        <Button
+                            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                            isDisabled={currentPage === totalPages}
+                        >
+                            Next
+                        </Button>
+                    </HStack>
+                </>
+            )}
+        </Box>
+    );
+};
+
+export default ListingsPage;
