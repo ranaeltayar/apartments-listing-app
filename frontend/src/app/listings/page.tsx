@@ -23,17 +23,17 @@ import axiosInstance from '@/app/axios/axiosInstance';
 
 const ListingsPage = () => {
     const [listings, setListings] = useState<IListItem[]>([]);
-    const [loading, setLoading] = useState<boolean>(true); // Loading state
-    const [currentPage, setCurrentPage] = useState<number>(1); // Current page
-    const [totalListings, setTotalListings] = useState<number>(0); // Total listings count
+    const [loading, setLoading] = useState<boolean>(true);
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [totalListings, setTotalListings] = useState<number>(0);
     const listingsPerPage = 10; // Number of listings per page
-    const router = useRouter(); // Initialize the router
+    const router = useRouter();
 
     useEffect(() => {
         const fetchListings = async () => {
             try {
-                setLoading(true); // Start loading
-                const offset = (currentPage - 1) * listingsPerPage; // Calculate offset
+                setLoading(true);
+                const offset = (currentPage - 1) * listingsPerPage;
                 const response = await axiosInstance.get<IListingResponse>(`/units`, {
                     params: {
                         limit: listingsPerPage,
@@ -41,7 +41,7 @@ const ListingsPage = () => {
                     },
                 });
                 setListings(response.data.listings);
-                setTotalListings(response.data.pagination.total); // Set total listings count
+                setTotalListings(response.data.pagination.total);
             } catch (error) {
                 console.error('Error fetching listings:', error);
             } finally {
@@ -50,13 +50,13 @@ const ListingsPage = () => {
         };
 
         fetchListings();
-    }, [currentPage]); // Dependency array includes currentPage
+    }, [currentPage]);
 
     const handleCardClick = (id: string) => {
         router.push(ListingsEndpoints.UNITS_LIST + `/${id}`);
     };
 
-    const totalPages = Math.ceil(totalListings / listingsPerPage); // Calculate total pages
+    const totalPages = Math.ceil(totalListings / listingsPerPage);
 
     return (
         <Box>
