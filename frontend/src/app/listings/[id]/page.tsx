@@ -2,13 +2,13 @@
 
 import {Box, Heading, Image, Spinner, Tag, Text, VStack} from '@chakra-ui/react';
 import React, {useEffect, useState} from 'react';
-import axios from 'axios';
 import Slider from 'react-slick';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import {formatPrice} from '@/app/helpers/currency-format';
 import {IAmenity} from '@/app/responses/amenity.interface';
 import {MdAttachMoney, MdBathtub, MdBedroomChild, MdCropSquare, MdLocationOn} from 'react-icons/md';
+import axiosInstance from '@/app/axios/axiosInstance';
 
 const DetailsPage = ({params}: { params: { id: string } }) => {
     const [listing, setListing] = useState<any>(null); // State for the listing details
@@ -19,7 +19,7 @@ const DetailsPage = ({params}: { params: { id: string } }) => {
             if (params.id) { // Check if the ID is available
                 try {
                     setLoading(true); // Start loading
-                    const response = await axios.get(`http://localhost:5000/api/units/${params.id}`);
+                    const response = await axiosInstance.get(`units/${params.id}`);
                     setListing(response.data); // Set the listing details
                 } catch (error) {
                     console.error('Error fetching listing details:', error);

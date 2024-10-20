@@ -16,9 +16,10 @@ import {MdBathtub, MdBedroomChild, MdCropSquare, MdLocationOn} from 'react-icons
 import React, {useEffect, useState} from 'react';
 import {IListingResponse} from '@/app/responses/listing-response.interface';
 import {IListItem} from '@/app/responses/list-item.interface';
-import axios from 'axios';
 import {useRouter} from 'next/navigation';
 import {formatPrice} from '@/app/helpers/currency-format';
+import {ListingsEndpoints} from '@/app/constants/routes.const';
+import axiosInstance from '@/app/axios/axiosInstance';
 
 const ListingsPage = () => {
     const [listings, setListings] = useState<IListItem[]>([]);
@@ -33,7 +34,7 @@ const ListingsPage = () => {
             try {
                 setLoading(true); // Start loading
                 const offset = (currentPage - 1) * listingsPerPage; // Calculate offset
-                const response = await axios.get<IListingResponse>(`http://localhost:5000/api/units`, {
+                const response = await axiosInstance.get<IListingResponse>(`/units`, {
                     params: {
                         limit: listingsPerPage,
                         offset: offset,
@@ -52,7 +53,7 @@ const ListingsPage = () => {
     }, [currentPage]); // Dependency array includes currentPage
 
     const handleCardClick = (id: string) => {
-        router.push(`/listings/${id}`);
+        router.push(ListingsEndpoints.UNITS_LIST + `/${id}`);
     };
 
     const totalPages = Math.ceil(totalListings / listingsPerPage); // Calculate total pages

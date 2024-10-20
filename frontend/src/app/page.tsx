@@ -1,5 +1,6 @@
 import {redirect} from 'next/navigation';
+import {ListingsEndpoints} from '@/app/constants/routes.const';
 
 export default function Home() {
-    redirect("/listings");
+    redirect(ListingsEndpoints.UNITS_LIST);
 }
