@@ -1,0 +1,99 @@
+{
+	"info": {
+		"_postman_id": "84b782dc-d6a3-4906-913b-45db79cb4bee",
+		"name": "Nawy Technical Task",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get All Listings",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJraWQiOiIwYjg4NTAzNy0yMDk1LTRlOGQtOTE2Zi05ZWU5MDQ1MTkzMTUiLCJhbGciOiJSUzUxMiJ9.eyJzdWIiOiI2ZjU5NGU1OC01ODdmLTQxZjItOTQ2ZS1mM2FhMmE0ZGNhMDgiLCJhdWQiOiJDQkNXIiwibmJmIjoxNzI5MTc3NjYyLCJpc3MiOiJodHRwOi8vY2liLWRlbW8tdWF0LmFwcHMub2Nwbm9ucHJvZC1hZGMubWUuYWxpbm1hLmludGVybmFsL2JjLWF1dGhlbnRpY2F0aW9uIiwiZXhwIjoxNzI5MjIwODYyLCJpYXQiOjE3MjkxNzc2NjIsImp0aSI6IjEzMGE5MTU4LWE1M2ItNGQxNC1iMDU3LTFkZmNiNzhhZDA0MiJ9.jjY5Jb6rcs7rfCqtqgpmcxINXXK_LQBhHZjsSx1eqSPEWhX7iXxudAT0wbGdgPTl5ap6wfUIyyaT9V9OAF99V_vR2e73ryaGEofhllykXEQ3X9qXTYJcHNfnCNgHUR88SQrREsjBY8DXjIhYcgDu6Rt3bG4_g4ib9jarjq_aL4xRrMa0lUeY1y1BtKpV-1IkHXA4gLiilK0kvmBCRCHITHL0Un0DiW-Vn_UldnbEamCDbuf9h-MW76SUv4FRUfNsIXWr4UPZsFTToC_XX7_-Cy424mtkU2CN_kI2TPrHiptDfRVjIwBtuL-FVvzQuvG4SXnnzC9JEKZmLw3nsbjSWQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"refNumber\": \"APT123\",\r\n    \"bedrooms\": 3,\r\n    \"bathrooms\": 2,\r\n    \"name\":\"Galala\",\r\n    \"number\":1,\r\n    \"project\":{\r\n        \"name\": \"Galala\"\r\n    },\r\n    \"imageUrls\": [\r\n        \"https://i.ibb.co/C9L5HbR/Screenshot-12.png\",\r\n        \"https://i.ibb.co/5sdS1Jw/gala2.png\",\r\n        \"https://i.ibb.co/6N0m0TK/gala.png\"\r\n\r\n    ],\r\n    \"compound\": \"Galala\",\r\n    \"propertyType\": \"Apartment\",\r\n    \"saleType\": \"Resale\",\r\n    \"description\": \"A beautiful apartment in the heart of the city with modern amenities and stunning views.\",\r\n    \"currency\": \"EUR\",\r\n    \"price\": \"660000\",\r\n    \"size\": \"15009\",\r\n    \"finishingType\": \"Finished\",\r\n    \"amenities\": [\r\n        {\r\n            \"name\": \"Swimming Pool\"\r\n        },\r\n        {\r\n            \"name\": \"Gym\"\r\n        }\r\n    ],\r\n    \"location\": {\r\n        \"latitude\": 40.7128,\r\n        \"longitude\": -74.0060,\r\n        \"address\": \"123 Main St, New York, NY\"\r\n    }\r\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/units",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"units"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create New Listings",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJraWQiOiIwYjg4NTAzNy0yMDk1LTRlOGQtOTE2Zi05ZWU5MDQ1MTkzMTUiLCJhbGciOiJSUzUxMiJ9.eyJzdWIiOiI2ZjU5NGU1OC01ODdmLTQxZjItOTQ2ZS1mM2FhMmE0ZGNhMDgiLCJhdWQiOiJDQkNXIiwibmJmIjoxNzI5MTc3NjYyLCJpc3MiOiJodHRwOi8vY2liLWRlbW8tdWF0LmFwcHMub2Nwbm9ucHJvZC1hZGMubWUuYWxpbm1hLmludGVybmFsL2JjLWF1dGhlbnRpY2F0aW9uIiwiZXhwIjoxNzI5MjIwODYyLCJpYXQiOjE3MjkxNzc2NjIsImp0aSI6IjEzMGE5MTU4LWE1M2ItNGQxNC1iMDU3LTFkZmNiNzhhZDA0MiJ9.jjY5Jb6rcs7rfCqtqgpmcxINXXK_LQBhHZjsSx1eqSPEWhX7iXxudAT0wbGdgPTl5ap6wfUIyyaT9V9OAF99V_vR2e73ryaGEofhllykXEQ3X9qXTYJcHNfnCNgHUR88SQrREsjBY8DXjIhYcgDu6Rt3bG4_g4ib9jarjq_aL4xRrMa0lUeY1y1BtKpV-1IkHXA4gLiilK0kvmBCRCHITHL0Un0DiW-Vn_UldnbEamCDbuf9h-MW76SUv4FRUfNsIXWr4UPZsFTToC_XX7_-Cy424mtkU2CN_kI2TPrHiptDfRVjIwBtuL-FVvzQuvG4SXnnzC9JEKZmLw3nsbjSWQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"refNumber\": \"APT123\",\r\n    \"bedrooms\": 3,\r\n    \"bathrooms\": 2,\r\n    \"name\":\"Galala\",\r\n    \"number\":1,\r\n    \"project\":{\r\n        \"name\": \"Galala\"\r\n    },\r\n    \"imageUrls\": [\r\n        \"https://i.ibb.co/C9L5HbR/Screenshot-12.png\",\r\n        \"https://i.ibb.co/5sdS1Jw/gala2.png\",\r\n        \"https://i.ibb.co/6N0m0TK/gala.png\"\r\n\r\n    ],\r\n    \"compound\": \"Galala\",\r\n    \"propertyType\": \"Apartment\",\r\n    \"saleType\": \"Resale\",\r\n    \"description\": \"A beautiful apartment in the heart of the city with modern amenities and stunning views.\",\r\n    \"currency\": \"EUR\",\r\n    \"price\": \"660000\",\r\n    \"size\": \"15009\",\r\n    \"finishingType\": \"Finished\",\r\n    \"amenities\": [\r\n        {\r\n            \"name\": \"Swimming Pool\"\r\n        },\r\n        {\r\n            \"name\": \"Gym\"\r\n        }\r\n    ],\r\n    \"location\": {\r\n        \"latitude\": 40.7128,\r\n        \"longitude\": -74.0060,\r\n        \"address\": \"123 Main St, New York, NY\"\r\n    }\r\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/units",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"units"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Listing by ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": ""
+				}
+			},
+			"response": []
+		}
+	]
+}
