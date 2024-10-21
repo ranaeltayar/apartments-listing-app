@@ -1,8 +1,6 @@
-import ApartmentModel from "../../models/schemas/unit.model";
 import unitModel from "../../models/schemas/unit.model";
 import {IListingResponse} from '../../models/api/responses/listing-response.interface';
 import {messages} from '../../constants/messages.const';
-import {IUnit} from '../../models/interfaces/unit.interface';
 import {HttpError} from '../handlers/errors/http-error';
 import {IProject} from '../../models/interfaces/project.interface';
 import ProjectModel from '../../models/schemas/project.model';
@@ -13,12 +11,12 @@ import {ICreateListingRequest} from '../../models/api/requests/create-listing-re
 class ApartmentService {
     async getAllApartments(limit: number, offset: number): Promise<IListingResponse> {
         try {
-            const units = await ApartmentModel.find({}, 'name bedrooms bathrooms price imageUrls currency size compound')
+            const units = await unitModel.find({}, 'name bedrooms bathrooms price imageUrls currency size compound')
                 .skip(offset)
                 .limit(limit)
                 .exec();
 
-            const total = await ApartmentModel.countDocuments();
+            const total = await unitModel.countDocuments();
             return {
                 message: messages.CREATION_SUCCESSFULLY,
                 listings: units,
@@ -35,7 +33,7 @@ class ApartmentService {
 
     async getApartmentDetails(id: string) {
         try {
-            const apartment = await ApartmentModel.findById(id).exec();
+            const apartment = await unitModel.findById(id).exec();
             if (!apartment) {
                 throw new HttpError(messages.DATA_NOT_FOUND, 404);
             }
@@ -50,7 +48,7 @@ class ApartmentService {
 
     async createApartment(body: ICreateListingRequest) {
         try {
-            const project: IProject | null= await ProjectModel.findById(
+            const project: IProject | null = await ProjectModel.findById(
                 body.projectId,
             );
             if (!project) {
@@ -60,7 +58,7 @@ class ApartmentService {
             const amenitiesIds: string[] = body.amenitiesIds;
             let amenities: IAmenity[] = [];
             if (amenitiesIds && amenitiesIds.length > 0) {
-                amenities = await AmenityModel.find({ _id: { $in: amenitiesIds } });
+                amenities = await AmenityModel.find({_id: {$in: amenitiesIds}});
                 if (amenities.length !== amenitiesIds.length) {
                     throw new HttpError(messages.AMENITY_NOT_FOUND, 404);
                 }
