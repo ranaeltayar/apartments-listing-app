@@ -1,4 +1,4 @@
-"use client";  // Ensures this component is client-side
+"use client";
 
 import { Button, Text } from '@chakra-ui/react';
 import { ArrowBackIcon } from '@chakra-ui/icons';
