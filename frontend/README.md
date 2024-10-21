@@ -1,36 +1,46 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Apartment Listing App
 
-## Getting Started
+This is a simple apartment listing application built using the MERN stack (MongoDB, Express.js, React, Node.js). It provides functionalities to view, create, and manage apartment listings, along with details about amenities and property types.
 
-First, run the development server:
+## Features
+
+- **View Listings:** Users can browse through a list of available apartments with essential details.
+- **Listing Details:** Each listing has a detailed view that displays images, descriptions, price, and more.
+- **Responsive Design:** The application is designed to be responsive and user-friendly across various devices.
+- **API Integration:** The frontend communicates with a backend API to fetch data and manage listings.
+- **Containerization:** The application can be run using Docker for easy deployment.
+
+## Technology Stack
+
+- **Frontend:** React, Next.js, Chakra UI
+- **Backend:** Node.js, Express.js
+- **Database:** MongoDB (MongoDB Atlas)
+- **State Management:** React hooks
+- **Styling:** CSS-in-JS with Chakra UI
+
+## APIs
+
+The application communicates with the following backend APIs:
+
+1. **GET /api/units:** Retrieve all apartment listings.
+2. **GET /api/units/:id:** Get details of a specific apartment by its ID.
+3. **POST /api/units:** Create a new apartment listing.
+
+## Postman Collection
+
+A Postman collection is included for testing the backend APIs. The table below summarizes the endpoints included in the collection:
+
+| Method | Endpoint            | Description                       |
+|--------|---------------------|-----------------------------------|
+| GET    | /api/units          | Retrieve all apartment listings    |
+| GET    | /api/units/:id      | Get details of a specific listing  |
+| POST   | /api/units          | Create a new apartment listing     |
+
+You can use the provided collection and environment to easily call the three backend APIs.
+
+## Docker Setup
+
+The application is containerized and can be run with Docker Compose. Use the following command to start all services:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+ docker compose up --build

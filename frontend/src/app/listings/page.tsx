@@ -58,6 +58,13 @@ const ListingsPage = () => {
 
     const totalPages = Math.ceil(totalListings / listingsPerPage);
 
+    if (listings.length == 0) {
+        return <Box textAlign="center" py={10} px={6}>
+            <Heading size="lg" mb={4}>No Listings Found</Heading>
+            <Text fontSize="md" color="gray.600">We could&apos;t find any listings. Please try again later.</Text>
+        </Box>
+    }
+
     return (
         <Box>
             <Heading mb={6} size='xl'>Available Listings</Heading>
