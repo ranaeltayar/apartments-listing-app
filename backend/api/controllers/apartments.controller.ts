@@ -11,6 +11,7 @@ class ApartmentController {
      *
      * @param {Request} req - The HTTP request object.
      * @param {Response} res - The HTTP response object.
+     * @param {NextFunction} next - The next middleware function.
      *
      * @returns {Promise<void>} Returns a list of units in JSON format or an error message.
      *
@@ -35,10 +36,9 @@ class ApartmentController {
      *
      * @param {Request} req - The HTTP request object.
      * @param {Response} res - The HTTP response object.
+     * @param {NextFunction} next - The next middleware function.
      *
-     * @param next
-     * @returns {Promise<void>} Returns the apartment details in JSON format or an error message.
-     *
+     * @returns {Promise<Response | void>} Returns the apartment details in JSON format or an error message.
      */
 
     getApartmentDetails = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
@@ -60,6 +60,7 @@ class ApartmentController {
      *
      * @param {Request} req - The HTTP request object.
      * @param {Response} res - The HTTP response object.
+     * @param {NextFunction} next - The next middleware function.
      *
      * @returns {Promise<Response>} Returns the created apartment in JSON format or an error message.
      *
@@ -71,7 +72,7 @@ class ApartmentController {
         try {
             const body = req.body;
             const apartment = await apartmentService.createApartment(body);
-            return res.status(200).json(apartment);
+            return res.status(201).json(apartment);
         } catch (error) {
             next(error);
         }

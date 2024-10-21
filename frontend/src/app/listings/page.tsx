@@ -10,6 +10,7 @@ import {
     SimpleGrid,
     Spinner,
     Text,
+    useToast,
 } from '@chakra-ui/react';
 import {MdBathtub, MdBedroomChild, MdCropSquare, MdLocationOn} from 'react-icons/md';
 import React, {useEffect, useState} from 'react';
@@ -28,6 +29,7 @@ const ListingsPage = () => {
     const [totalListings, setTotalListings] = useState<number>(0);
     const listingsPerPage = 10; // Number of listings per page
     const router = useRouter();
+    const toast = useToast();
 
     useEffect(() => {
         const fetchListings = async () => {
@@ -42,15 +44,21 @@ const ListingsPage = () => {
                 });
                 setListings(response.data.listings);
                 setTotalListings(response.data.pagination.total);
-            } catch (error) {
-                console.error('Error fetching listings:', error);
+            } catch {
+                toast({
+                    title: "Error fetching listings.",
+                    description: "There was an issue retrieving listings. Please try again later.",
+                    status: "error",
+                    duration: 5000,
+                    isClosable: true,
+                });
             } finally {
                 setLoading(false);
             }
         };
 
         fetchListings();
-    }, [currentPage]);
+    }, [currentPage, toast]);
 
     const handleCardClick = (id: string) => {
         router.push(ListingsEndpoints.UNITS_LIST + `/${id}`);
@@ -58,25 +66,27 @@ const ListingsPage = () => {
 
     const totalPages = Math.ceil(totalListings / listingsPerPage);
 
-    if (listings.length == 0 && !loading) {
-        return <Box textAlign="center" py={10} px={6}>
-            <Heading size="lg" mb={4}>No Listings Found</Heading>
-            <Text fontSize="md" color="gray.600">We could&apos;t find any listings. Please try again later.</Text>
-        </Box>
+    if (listings.length === 0 && !loading) {
+        return (
+            <Box textAlign="center" py={10} px={6}>
+                <Heading size="lg" mb={4}>No Listings Found</Heading>
+                <Text fontSize="md" color="gray.600">We couldn&apos;t find any listings. Please try again
+                    later.</Text>
+            </Box>
+        );
     }
 
     return (
         <Box>
             <Heading mb={6} size='xl'>Available Listings</Heading>
-            <Heading mb={6} size='l'>{totalListings} Results Found</Heading>
-
+            <Heading mb={6} size='lg'>{totalListings} Results Found</Heading>
 
             {loading ? (
                 <Box
                     display="flex"
-                    justifyContent="center" // Center horizontally
-                    alignItems="center"      // Center vertically
-                    height="100vh"           // Full viewport height
+                    justifyContent="center"
+                    alignItems="center"
+                    height="100vh"
                 >
                     <Spinner
                         thickness='4px'
@@ -90,37 +100,43 @@ const ListingsPage = () => {
                 <>
                     <SimpleGrid columns={[1, 2, 3]} spacing={10}>
                         {listings.map((listing) => (
-                            <Card key={listing._id} onClick={() => handleCardClick(listing._id)}
-                                  cursor="pointer" boxShadow={"5px 4px 15px 1px rgba(0,0,0,0.2)"}>
-                                <Box w={"100%"} borderRadius="md" minH="300px">
-                                <Image
-                                    src={listing.imageUrls[0]}
-                                    alt="Image"
-                                    width={800}
-                                    height={300}
-                                    style={{objectFit: "cover", height:"300px", width:"100%"}}
-                                />
+                            <Card
+                                key={listing._id}
+                                onClick={() => handleCardClick(listing._id)}
+                                cursor="pointer"
+                                boxShadow={"5px 4px 15px 1px rgba(0,0,0,0.2)"}
+                                borderRadius="lg"
+                                overflow="hidden"
+                                transition="transform 0.2s"
+                                _hover={{transform: 'scale(1.05)'}} // Add hover effect
+                            >
+                                <Box w={"100%"} height="300px" position="relative">
+                                    <Image
+                                        src={listing.imageUrls[0]}
+                                        alt={listing.name} // Improve accessibility
+                                        fill // Use fill to cover the box
+                                        style={{objectFit: "cover"}}
+                                    />
                                 </Box>
                                 <CardBody>
-                                    <Text fontWeight="bold">{listing.name}</Text>
-                                    <Text display="flex" alignItems="center">
-                                        <MdLocationOn style={{
-                                            marginRight: '5px',
-                                            color: 'rgb(204 57 0)'
-                                        }}/> {/* Location icon */}
+                                    <Text fontWeight="bold" fontSize="lg">{listing.name}</Text>
+                                    <Text display="flex" alignItems="center" mb={1}>
+                                        <MdLocationOn
+                                            style={{marginRight: '5px', color: 'rgb(204 57 0)'}}/>
                                         {listing.compound}
                                     </Text>
-                                    <Box display="flex" alignItems="center">
+                                    <Box display="flex" alignItems="center" mb={1}>
                                         <MdBedroomChild style={{marginRight: '5px'}}/>
                                         {listing.bedrooms} Bed
-                                        \ <MdBathtub style={{marginRight: '5px'}}/>
+                                        <MdBathtub
+                                            style={{marginRight: '5px', marginLeft: '10px'}}/>
                                         {listing.bathrooms} Bath
                                     </Box>
-                                    <Text fontWeight="bold"
-                                          style={{'color': '#008080'}}>{formatPrice(listing.price, listing.currency)}</Text>
-                                    <Box display="flex" alignItems="center"> {/* Size with icon */}
-                                        <MdCropSquare
-                                            style={{marginRight: '5px'}}/> {/* Size icon */}
+                                    <Text fontWeight="bold" color="#008080" fontSize="lg">
+                                        {formatPrice(listing.price, listing.currency)}
+                                    </Text>
+                                    <Box display="flex" alignItems="center">
+                                        <MdCropSquare style={{marginRight: '5px'}}/>
                                         <Text fontWeight="bold">{listing.size} m²</Text>
                                     </Box>
                                 </CardBody>
@@ -133,6 +149,7 @@ const ListingsPage = () => {
                         <Button
                             onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                             isDisabled={currentPage === 1}
+                            colorScheme="teal"
                         >
                             Previous
                         </Button>
@@ -142,6 +159,7 @@ const ListingsPage = () => {
                         <Button
                             onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
                             isDisabled={currentPage === totalPages}
+                            colorScheme="teal"
                         >
                             Next
                         </Button>

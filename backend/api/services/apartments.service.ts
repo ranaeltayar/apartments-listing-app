@@ -7,8 +7,16 @@ import ProjectModel from '../../models/schemas/project.model';
 import {IAmenity} from '../../models/interfaces/amenity.interface';
 import AmenityModel from '../../models/schemas/amenity.model';
 import {ICreateListingRequest} from '../../models/api/requests/create-listing-request.interface';
+import {IUnit} from '../../models/interfaces/unit.interface';
 
 class ApartmentService {
+    /**
+     * Retrieve all apartments with pagination.
+     *
+     * @param {number} limit - The number of apartments to retrieve.
+     * @param {number} offset - The number of apartments to skip.
+     * @returns {Promise<IListingResponse>} The response containing listings and pagination info.
+     */
     async getAllApartments(limit: number, offset: number): Promise<IListingResponse> {
         try {
             const units = await unitModel.find({}, 'name bedrooms bathrooms price imageUrls currency size compound')
@@ -25,13 +33,20 @@ class ApartmentService {
                     offset: offset,
                     limit: limit
                 },
-            }
+            };
         } catch (error) {
             throw new HttpError(messages.DATA_FETCHING_ERROR, 500);
         }
     }
 
-    async getApartmentDetails(id: string) {
+    /**
+     * Get details of a specific apartment by its ID.
+     *
+     * @param {string} id - The ID of the apartment.
+     * @returns {Promise<IUnit>} The apartment details.
+     */
+
+    async getApartmentDetails(id: string): Promise<IUnit> {
         try {
             const apartment = await unitModel.findById(id).exec();
             if (!apartment) {
@@ -46,18 +61,22 @@ class ApartmentService {
         }
     }
 
-    async createApartment(body: ICreateListingRequest) {
+    /**
+     * Create a new apartment entry.
+     *
+     * @param {ICreateListingRequest} body - The request body containing apartment details.
+     * @returns {Promise<IUnit>} The created apartment.
+     */
+    async createApartment(body: ICreateListingRequest): Promise<IUnit> {
         try {
-            const project: IProject | null = await ProjectModel.findById(
-                body.projectId,
-            );
+            const project: IProject | null = await ProjectModel.findById(body.projectId);
             if (!project) {
                 throw new HttpError(messages.PROJECT_NOT_FOUND, 404);
             }
 
-            const amenitiesIds: string[] = body.amenitiesIds;
+            const amenitiesIds: string[] = body.amenitiesIds || [];
             let amenities: IAmenity[] = [];
-            if (amenitiesIds && amenitiesIds.length > 0) {
+            if (amenitiesIds.length > 0) {
                 amenities = await AmenityModel.find({_id: {$in: amenitiesIds}});
                 if (amenities.length !== amenitiesIds.length) {
                     throw new HttpError(messages.AMENITY_NOT_FOUND, 404);
