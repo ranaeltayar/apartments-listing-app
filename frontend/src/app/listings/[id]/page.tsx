@@ -11,9 +11,10 @@ import {MdAttachMoney, MdBathtub, MdBedroomChild, MdCropSquare, MdLocationOn} fr
 import axiosInstance from '@/app/axios/axiosInstance';
 import {ArrowBackIcon} from '@chakra-ui/icons';
 import {useRouter} from 'next/navigation';
+import {IUnit} from '@/app/responses/unit.interface';
 
 const DetailsPage = ({params}: { params: { id: string } }) => {
-    const [listing, setListing] = useState<any>(null);
+    const [listing, setListing] = useState<IUnit>();
     const [loading, setLoading] = useState<boolean>(true);
     const router = useRouter();
 

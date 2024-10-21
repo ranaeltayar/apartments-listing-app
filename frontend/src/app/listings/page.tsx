@@ -7,7 +7,6 @@ import {
     CardBody,
     Heading,
     HStack,
-    Image,
     SimpleGrid,
     Spinner,
     Text,
@@ -20,6 +19,7 @@ import {useRouter} from 'next/navigation';
 import {formatPrice} from '@/app/helpers/currency-format';
 import {ListingsEndpoints} from '@/app/constants/routes.const';
 import axiosInstance from '@/app/axios/axiosInstance';
+import Image from "next/image";
 
 const ListingsPage = () => {
     const [listings, setListings] = useState<IListItem[]>([]);
@@ -85,14 +85,15 @@ const ListingsPage = () => {
                         {listings.map((listing) => (
                             <Card key={listing._id} onClick={() => handleCardClick(listing._id)}
                                   cursor="pointer" boxShadow={"5px 4px 15px 1px rgba(0,0,0,0.2)"}>
+                                <Box w={"100%"} borderRadius="md" minH="300px">
                                 <Image
                                     src={listing.imageUrls[0]}
                                     alt="Image"
-                                    width="100%"
-                                    height="300px"
-                                    objectFit="cover"
-                                    borderRadius="md"
+                                    width={800}
+                                    height={300}
+                                    style={{objectFit: "cover", height:"300px", width:"100%"}}
                                 />
+                                </Box>
                                 <CardBody>
                                     <Text fontWeight="bold">{listing.name}</Text>
                                     <Text display="flex" alignItems="center">
