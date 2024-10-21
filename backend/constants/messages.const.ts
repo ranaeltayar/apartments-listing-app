@@ -4,6 +4,7 @@ export const messages = {
     DATA_NOT_FOUND : "Listing not found",
     DATA_FETCHING_ERROR : "Something went wrong in fetching listing",
     DATA_FETCHED_SUCCESSFULLY : "Data fetched successfully",
+    SOMETHING_WENT_WRONG : "something went wrong",
     AMENITY_NOT_FOUND:"Amenity Not Found",
     PROJECT_NOT_FOUND:"project Not Found"
 

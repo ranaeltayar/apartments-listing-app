@@ -3,6 +3,12 @@ import unitModel from "../../models/schemas/unit.model";
 import {IListingResponse} from '../../models/api/responses/listing-response.interface';
 import {messages} from '../../constants/messages.const';
 import {IUnit} from '../../models/interfaces/unit.interface';
+import {HttpError} from '../handlers/errors/http-error';
+import {IProject} from '../../models/interfaces/project.interface';
+import ProjectModel from '../../models/schemas/project.model';
+import {IAmenity} from '../../models/interfaces/amenity.interface';
+import AmenityModel from '../../models/schemas/amenity.model';
+import {ICreateListingRequest} from '../../models/api/requests/create-listing-request.interface';
 
 class ApartmentService {
     async getAllApartments(limit: number, offset: number): Promise<IListingResponse> {
@@ -23,7 +29,7 @@ class ApartmentService {
                 },
             }
         } catch (error) {
-            throw new Error(messages.DATA_FETCHING_ERROR);
+            throw new HttpError(messages.DATA_FETCHING_ERROR, 500);
         }
     }
 
@@ -31,21 +37,53 @@ class ApartmentService {
         try {
             const apartment = await ApartmentModel.findById(id).exec();
             if (!apartment) {
-                throw new Error(messages.DATA_NOT_FOUND);
+                throw new HttpError(messages.DATA_NOT_FOUND, 404);
             }
             return apartment;
         } catch (error) {
-            throw new Error(messages.DATA_FETCHING_ERROR);
+            if (error instanceof HttpError) {
+                throw error;
+            }
+            throw new HttpError(messages.DATA_FETCHING_ERROR, 500);
         }
     }
 
-    async createApartment(unitData: IUnit) {
+    async createApartment(body: ICreateListingRequest) {
         try {
+            const project: IProject | null= await ProjectModel.findById(
+                body.projectId,
+            );
+            if (!project) {
+                throw new HttpError(messages.PROJECT_NOT_FOUND, 404);
+            }
+
+            const amenitiesIds: string[] = body.amenitiesIds;
+            let amenities: IAmenity[] = [];
+            if (amenitiesIds && amenitiesIds.length > 0) {
+                amenities = await AmenityModel.find({ _id: { $in: amenitiesIds } });
+                if (amenities.length !== amenitiesIds.length) {
+                    throw new HttpError(messages.AMENITY_NOT_FOUND, 404);
+                }
+            }
+
+            const unitData = {
+                ...body,
+                project: {
+                    name: project.name,
+                    _id: project._id,
+                },
+                amenities: amenities.map(amenity => ({
+                    name: amenity.name,
+                    _id: amenity._id,
+                })),
+            };
             const newUnit = new unitModel(unitData);
             return await newUnit.save();
         } catch (error) {
-            console.log(error)
-            throw new Error(messages.CREATION_ERROR);
+            if (error instanceof HttpError) {
+                throw error;
+            }
+            throw new HttpError(messages.CREATION_ERROR, 500);
         }
     }
 }

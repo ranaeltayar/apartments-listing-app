@@ -5,6 +5,7 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import http from "http";
 import apartmentsRouter from "./api/routers/apartment.router";
+import errorHandler from './api/handlers/error-handler';
 
 dotenv.config();
 
@@ -18,6 +19,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use("/api/units", apartmentsRouter);
+
+app.use(errorHandler);
+
 
 server.listen(PORT, () => {
   connectDB();
