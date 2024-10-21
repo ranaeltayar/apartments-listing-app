@@ -21,9 +21,9 @@ import {formatPrice} from '@/app/helpers/currency-format';
 import {IAmenity} from '@/app/responses/amenity.interface';
 import {MdAttachMoney, MdBathtub, MdBedroomChild, MdCropSquare, MdLocationOn} from 'react-icons/md';
 import axiosInstance from '@/app/axios/axiosInstance';
-import {ArrowBackIcon} from '@chakra-ui/icons';
 import {useRouter} from 'next/navigation';
 import {IUnit} from '@/app/responses/unit.interface';
+import ClientBackButton from '@/app/components/clientBackButton';
 
 const DetailsPage = ({params}: { params: { id: string } }) => {
     const [listing, setListing] = useState<IUnit>();
@@ -92,7 +92,7 @@ const DetailsPage = ({params}: { params: { id: string } }) => {
                 <Heading size="lg" mb={4}>No Listing Details Found</Heading>
                 <Text fontSize="md" color="gray.600">We couldn&apos;t find any listing details.
                     Please try again later.</Text>
-                <Button onClick={() => router.back()} mt={4} colorScheme="teal">Go Back</Button>
+                <ClientBackButton/>
             </Box>
         );
     }
@@ -107,19 +107,7 @@ const DetailsPage = ({params}: { params: { id: string } }) => {
 
     return (
         <>
-            <Button
-                onClick={() => router.back()}
-                colorScheme="teal"
-                variant="solid"
-                size="lg"
-                leftIcon={<ArrowBackIcon/>}
-                borderRadius="md"
-                boxShadow="md"
-                _hover={{boxShadow: "lg", transform: "scale(1.05)"}}
-                mb={5}
-            >
-                <Text fontWeight="bold">Back</Text>
-            </Button>
+            <ClientBackButton/>
             <Box p={20} boxShadow={"5px 4px 15px 1px rgba(0,0,0,0.2)"} borderRadius="md"
                  mx="auto">
                 <Heading mb={6} fontSize="2xl" fontWeight="bold">{listing.name}</Heading>

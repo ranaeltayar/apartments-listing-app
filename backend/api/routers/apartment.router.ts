@@ -7,6 +7,7 @@ import {validateCreateUnit} from '../validations/creation.validation';
 const router = express.Router();
 
 router.get("/", apartmentController.getAllApartments);
+
 router.get("/:id", apartmentController.getApartmentDetails);
 router.post("/", validateCreateUnit,apartmentController.createApartment);
 

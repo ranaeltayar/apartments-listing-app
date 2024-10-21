@@ -70,7 +70,8 @@ const ListingsPage = () => {
         return (
             <Box textAlign="center" py={10} px={6}>
                 <Heading size="lg" mb={4}>No Listings Found</Heading>
-                <Text fontSize="md" color="gray.600">We couldn&apos;t find any listings. Please try again
+                <Text fontSize="md" color="gray.600">We couldn&apos;t find any listings. Please try
+                    again
                     later.</Text>
             </Box>
         );

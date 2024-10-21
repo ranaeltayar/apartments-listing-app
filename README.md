@@ -20,7 +20,7 @@ This is a simple apartment listing application built using the MERN stack (Mongo
 
 ## APIs
 
-The application communicates with the following backend APIs:
+The application communicates with the following backend APIs: you can use the following link to access swagger(http://localhost:5000/api-docs/#/)
 
 1. **GET /api/units:** Retrieve all apartment listings.
 2. **GET /api/units/:id:** Get details of a specific apartment by its ID.
